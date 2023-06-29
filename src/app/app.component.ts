@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   count = 0;
-  title = 'MonApp';
+  title = 'PokeGuess';
   amount = 109768849700;
   increment() {
     this.count++;

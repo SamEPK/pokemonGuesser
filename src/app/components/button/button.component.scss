@@ -1,0 +1,19 @@
+button {
+  padding: 5px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &.green {
+    background-color: lightgreen;
+  }
+
+  &.red {
+    background-color: lightcoral;
+  }
+
+  &.blue {
+    background-color: lightblue;
+  }
+}
+
+
