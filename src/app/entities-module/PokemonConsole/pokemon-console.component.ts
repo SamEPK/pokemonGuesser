@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PokemonService } from '../service/pokemon.service';
 import { Pokemon } from '../entities-module.Pokemon';
 import { NgFor } from '@angular/common';
+import { Observable, take } from 'rxjs';
 
 @Component({
   selector: 'app-pokemon-console',
@@ -23,14 +24,10 @@ export class PokemonConsoleComponent implements OnInit {
   ngOnInit(): void {
     console.log('ngOnInit called');
     this.getPokemons();
-    throw new Error("un test")
+    // throw new Error("un test")
   }
 
-  getPokemons(): void {
-    this.monPokemonService.getAllPokemon()
-      .subscribe((pokemons: Pokemon[]) => {
-        this.pokemons = pokemons;
-        console.log(this.pokemons); // Affiche les données des Pokémon dans la console
-      });
+  async getPokemons(): Promise<void> {
+    this.pokemons = await this.monPokemonService.getAllPokemon()
   }
 }
