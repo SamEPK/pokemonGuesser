@@ -23,8 +23,16 @@ export class PokemonConsoleComponent implements OnInit {
   getPokemons(): void {
     console.log('getPokemons called');
     this.pokemons$ = this.pokemonService.getAllPokemon();
-    console.log('Pokémons:', this.pokemons$);
-  }
+    
+    this.pokemons$.subscribe(
+      (pokemons: Pokemon[]) => {
+        console.log('Pokémons:', pokemons);
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des Pokémon :', error);
+      }
+    );
+  }  
   formatPokemonNumber(pokemon: Pokemon): string {
     if (pokemon && pokemon.number) {
       const paddedNumber = pokemon.number.toString().padStart(3, '0');
@@ -55,7 +63,7 @@ export class PokemonConsoleComponent implements OnInit {
     );
   }
   deletePokemon(id: number): void {
-    this.pokemonService.deletePokemon(id).subscribe(
+    this.http.delete(`http://localhost:3000/pokemon/${id}`).subscribe(
       () => {
         console.log(`Pokémon avec l'ID ${id} supprimé avec succès`);
         this.getPokemons();
@@ -64,5 +72,18 @@ export class PokemonConsoleComponent implements OnInit {
         console.error(`Erreur lors de la suppression du Pokémon avec l'ID ${id}`, error);
       }
     );
-  }
+  }  
+  updatePokemon(pokemon: Pokemon): void {
+    const url = `http://localhost:3000/pokemon/${pokemon.number}`;
+  
+    this.http.put<Pokemon>(url, pokemon).subscribe(
+      (updatedPokemon: Pokemon) => {
+        console.log('Pokémon mis à jour :', updatedPokemon);
+        this.getPokemons();
+      },
+      (error) => {
+        console.error('Erreur lors de la mise à jour du Pokémon :', error);
+      }
+    );
+  }  
 }

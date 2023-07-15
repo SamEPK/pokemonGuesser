@@ -36,5 +36,4 @@ export class PokemonService {
   deletePokemon(id: number): Observable<Pokemon> {
     return this.http.post<Pokemon>(this.pokemonJsonFile, id);
   }
-  
 }
