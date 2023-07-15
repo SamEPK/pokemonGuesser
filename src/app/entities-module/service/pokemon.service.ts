@@ -7,7 +7,6 @@ import { Pokemon } from '../entities-module.Pokemon';
   providedIn: 'root'
 })
 export class PokemonService {
-  private apiUrl = '/pokemon';
   private pokemonJsonFile = "../assets/Data.json";
 
   constructor(private http: HttpClient) {}
@@ -46,12 +45,12 @@ export class PokemonService {
   
 
   updatePokemon(pokemon: Pokemon): Observable<Pokemon> {
-    const url = `${this.pokemonJsonFile}/${pokemon.number}`;
+    const url = `${this.pokemonJsonFile}/${pokemon.id}`;
     return this.http.put<Pokemon>(url, pokemon);
   }
 
-  deletePokemon(id: number): Observable<any> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.delete(url);
+  deletePokemon(id: number): Observable<void> {
+    const url = `${this.pokemonJsonFile}/${id}`;
+    return this.http.delete<void>(url);
   }
 }
