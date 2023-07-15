@@ -25,7 +25,13 @@ export class PokemonConsoleComponent implements OnInit {
     this.pokemons$ = this.pokemonService.getAllPokemon();
     console.log('Pokémons:', this.pokemons$);
   }
-
+  formatPokemonNumber(pokemon: Pokemon): string {
+    if (pokemon && pokemon.number) {
+      const paddedNumber = pokemon.number.toString().padStart(3, '0');
+      return `${paddedNumber}${pokemon.name}.webp`;
+    }
+    return '';
+  }
   ajouterPokemon(): void {
     this.http.get<Pokemon[]>('http://localhost:3000/pokemon').subscribe(
       (pokemons: Pokemon[]) => {

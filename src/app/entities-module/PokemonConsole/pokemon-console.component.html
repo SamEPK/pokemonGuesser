@@ -1,35 +1,37 @@
-<h2>Liste des Pokemon</h2>
-+<img src="assets/images/001Bulbasaur.webp" alt="">
-<div *ngIf="pokemons$ | async as pokemons">
-  <div class="admin-actions">
-    <form (submit)="ajouterPokemon()">
-      <input type="text" name="name" [(ngModel)]="newPokemon.name">
-      <button type="submit">Ajouter</button>
-    </form>
+<main>
+  <h2>Liste des Pokemon</h2>
+  <div *ngIf="pokemons$ | async as pokemons">
+    <div class="admin-actions">
+      <form (submit)="ajouterPokemon()">
+        <input type="text" name="name" [(ngModel)]="newPokemon.name">
+        <button type="submit">Ajouter</button>
+      </form>
+    </div>
+
+    <table class="pokemon-table">
+      <thead>
+        <tr>
+          <th>Numéro</th>
+          <th>Image</th>
+          <th>Nom</th>
+          <th>Type</th>
+          <th>Taille</th>
+          <th>Poids</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pokemon of pokemons">
+          <td>{{ pokemon.number }}</td>
+          <td>
+            <img [src]="'./assets/images/' + formatPokemonNumber(pokemon)" [alt]="pokemon.name" height="100">
+          </td>
+          <td>{{ pokemon.name }}</td>
+          <td>{{ pokemon.type1 }} / {{ pokemon.type2 }}</td>
+          <td>{{ pokemon.height }}</td>
+          <td>{{ pokemon.weight }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  
-  <table class="pokemon-table">
-    <thead>
-      <tr>
-        <th>Numéro</th>
-        <th>Image</th>
-        <th>Nom</th>
-        <th>Type</th>
-        <th>Taille</th>
-        <th>Poids</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let pokemon of pokemons">
-        <td>{{ pokemon.number }}</td>
-        <td>
-          <!-- <img [src]="'assets/' + formatPokemonNumber(pokemon)" [alt]="pokemon.name" height="100"> -->
-        </td>
-        <td>{{ pokemon.name }}</td>
-        <td>{{ pokemon.type1 }} / {{ pokemon.type2 }}</td>
-        <td>{{ pokemon.height }}</td>
-        <td>{{ pokemon.weight }}</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+
+</main>
