@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PokemonAdminComponent } from './admin/pokemon-admin/pokemon-admin.component';
+import { PokemonAdminComponent } from './pokemon-admin/pokemon-admin.component';
 
 
 

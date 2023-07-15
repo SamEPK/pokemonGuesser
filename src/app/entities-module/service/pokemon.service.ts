@@ -1,54 +1,56 @@
-import { Inject, Injectable } from '@angular/core';
-import { Pokemon } from '../entities-module.Pokemon';
-import { Observable, map, take, catchError, of } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { Pokemon } from '../entities-module.Pokemon';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PokemonService {
   private pokemonJsonFile = "../assets/Data.json";
-  
+
   constructor(private http: HttpClient) {}
 
-  async getAllPokemon(): Promise<Pokemon[]> {
-    try {
-      const data: Pokemon[]|undefined = await this.http.get<Pokemon[]>(this.pokemonJsonFile)
-        .pipe(
-          take(1),
-          map(response => response as Pokemon[]) // Transformer la réponse en Pokemon[]
-        )
-        .toPromise();
-      if (data === undefined) {
-        throw new Error('La réponse de la requête est undefined.');
-      }
-      // Stocker les données JSON dans une liste d'objets
-      const objets: Pokemon[] = data;
-      // console.log(objets); //DEBUG
+  getAllPokemon(): Observable<Pokemon[]> {
+    return this.http.get<Pokemon[]>(this.pokemonJsonFile);
+  }
   
-      return objets;
-    } catch (error) {
-      console.error('Une erreur inattendue s\'est produite:', error);
-      return []; // Renvoyer une liste vide en cas d'erreur inattendue
-    }
+  getOnePokemonById(id: number): Observable<Pokemon> {
+    const url = `${this.pokemonJsonFile}/${id}`;
+    return this.http.get<Pokemon>(url);
   }
 
-  getOnePokemonById(id:number) : Observable<Pokemon>{
-    throw new Error('Method not implemented.');
+  createPokemon(pokemon: Pokemon): Observable<Pokemon> {
+    // Récupérez les données actuelles du fichier JSON
+    this.getAllPokemon().subscribe(pokemons => {
+      // Ajoutez le nouveau Pokémon au tableau existant
+      pokemons.push(pokemon);
+  
+      // Enregistrez le tableau mis à jour dans le fichier JSON
+      this.savePokemonData(pokemons);
+    });
+  
+    // Retournez le Pokémon ajouté
+    return of(pokemon);
   }
+  
+  private savePokemonData(pokemons: Pokemon[]): void {
+    // Convertissez le tableau des Pokémon en JSON
+    const jsonPokemons = JSON.stringify(pokemons);
+  
+    // Enregistrez les données dans le stockage local (localStorage)
+    localStorage.setItem('pokemonData', jsonPokemons);
+  }
+  
+  
 
-  getOnePokemonByName(name:string) : Observable<Pokemon>{
-    throw new Error('Method not implemented.');
-  }
-  createPokemon(pokemon:Pokemon) : Observable<Pokemon>{
-    return this.http.post<Pokemon>(this.pokemonJsonFile, pokemon);
-  }
   updatePokemon(pokemon: Pokemon): Observable<Pokemon> {
     const url = `${this.pokemonJsonFile}/${pokemon.id}`;
     return this.http.put<Pokemon>(url, pokemon);
   }
+
   deletePokemon(id: number): Observable<void> {
     const url = `${this.pokemonJsonFile}/${id}`;
     return this.http.delete<void>(url);
-  }  
+  }
 }
