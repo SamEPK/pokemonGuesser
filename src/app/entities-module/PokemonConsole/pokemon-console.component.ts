@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 export class PokemonConsoleComponent implements OnInit {
   pokemons$: Observable<Pokemon[]> | undefined;
   newPokemon: Partial<Pokemon> = {};
-  
+
   constructor(private pokemonService: PokemonService, private http: HttpClient) {}
 
   ngOnInit(): void {
