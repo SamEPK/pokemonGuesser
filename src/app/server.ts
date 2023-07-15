@@ -8,7 +8,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(bodyParser.json());
-app.use(cors()); 
+app.use(cors());
 app.get('/pokemon', (req, res) => {
   const pokemonData = JSON.parse(fs.readFileSync(path.join(__dirname, '../assets/Data.json'), 'utf8'));
   res.json(pokemonData);
@@ -29,18 +29,14 @@ app.post('/pokemon', (req, res) => {
 });
 
 app.delete('/pokemon/:id', (req, res) => {
-  const pokemonId : number = parseInt(req.params.id);
+  const pokemonId: number = parseInt(req.params.id);
   const pokemonData = JSON.parse(fs.readFileSync(path.join(__dirname, '../assets/Data.json'), 'utf8'));
-  //console.log("pokemonData = " + pokemonData +'\n')
   const pokemonIndex = pokemonData.findIndex((pokemon: any) => pokemon.number == pokemonId);
-  
-  // console.log("pokemonIndex = " + pokemonIndex +'\n')
+
   if (pokemonIndex === -1) {
     res.status(404).json({ error: 'Pokémon non trouvé' });
   } else {
     const deletedPokemon = pokemonData.splice(pokemonIndex, 1)[0];
-    
-    // console.log("deletedPokemon = " + deletedPokemon +'\n')
 
     fs.writeFile(path.join(__dirname, '../assets/Data.json'), JSON.stringify(pokemonData, null, 2), (err) => {
       if (err) {
@@ -52,18 +48,39 @@ app.delete('/pokemon/:id', (req, res) => {
     });
   }
 });
+app.post('/pokemon/duplicate/:id', (req, res) => {
+  const pokemonId: number = parseInt(req.params.id);
+  const pokemonData = JSON.parse(fs.readFileSync(path.join(__dirname, '../assets/Data.json'), 'utf8'));
+  const originalPokemon = pokemonData.find((pokemon: any) => pokemon.number === pokemonId);
+
+  if (!originalPokemon) {
+    res.status(404).json({ error: 'Pokémon non trouvé' });
+  } else {
+    const duplicatedPokemon = { ...originalPokemon };
+    duplicatedPokemon.number = pokemonData.length + 1; // Générer un nouveau numéro unique pour le Pokémon dupliqué
+
+    pokemonData.push(duplicatedPokemon);
+    fs.writeFile(path.join(__dirname, '../assets/Data.json'), JSON.stringify(pokemonData, null, 2), (err) => {
+      if (err) {
+        console.error('Erreur lors de l\'écriture du fichier JSON :', err);
+        res.status(500).json({ error: 'Erreur lors de l\'écriture du fichier JSON' });
+      } else {
+        res.json(duplicatedPokemon);
+      }
+    });
+  }
+});
 app.put('/pokemon/:id', (req, res) => {
   const pokemonId: number = parseInt(req.params.id);
   const updatedPokemon = req.body;
   const pokemonData = JSON.parse(fs.readFileSync(path.join(__dirname, '../assets/Data.json'), 'utf8'));
   const pokemonIndex = pokemonData.findIndex((pokemon: any) => pokemon.number === pokemonId);
-  
-  console.log("pokemonIndex = " + pokemonIndex +'\n')
+
   if (pokemonIndex === -1) {
     res.status(404).json({ error: 'Pokémon non trouvé' });
   } else {
     pokemonData[pokemonIndex] = updatedPokemon;
-    
+
     fs.writeFile(path.join(__dirname, '../assets/Data.json'), JSON.stringify(pokemonData, null, 2), (err) => {
       if (err) {
         console.error('Erreur lors de l\'écriture du fichier JSON :', err);

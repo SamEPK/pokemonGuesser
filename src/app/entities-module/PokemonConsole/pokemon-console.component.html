@@ -63,15 +63,19 @@
             <ng-container *ngIf="!isEditing(pokemon)">
               <button (click)="deletePokemon(pokemon.number)">Supprimer</button>
               <button (click)="editPokemon(pokemon)">Editer</button>
+              
             </ng-container>
             <ng-container *ngIf="isEditing(pokemon)">
               <button (click)="updatePokemon()">Enregistrer</button>
               <button (click)="cancelEdit()">Annuler</button>
+              <button (click)="duplicatePokemon()">Dupliquer</button>
             </ng-container>
           </td>
+          
         </tr>
       </tbody>
       
     </table>
+    
   </div>
 </main>
