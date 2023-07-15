@@ -24,7 +24,7 @@ export class PokemonService {
     return this.http.post<Pokemon>(this.pokemonJsonFile, pokemon);
   }
 
-  private savePokemonData(pokemons: Pokemon[]): void {
+  savePokemonData(pokemons: Pokemon[]): void {
     const jsonPokemons = JSON.stringify(pokemons);
   }
 

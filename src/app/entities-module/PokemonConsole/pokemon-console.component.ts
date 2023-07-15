@@ -27,15 +27,26 @@ export class PokemonConsoleComponent implements OnInit {
   }
 
   ajouterPokemon(): void {
-    this.http.post<Pokemon>('http://localhost:3000/pokemon', this.newPokemon).subscribe(
-      (pokemon: Pokemon) => {
-        console.log('Nouveau Pokémon ajouté :', pokemon);
-        this.newPokemon = {};
-        this.getPokemons();
+    this.http.get<Pokemon[]>('http://localhost:3000/pokemon').subscribe(
+      (pokemons: Pokemon[]) => {
+        const lastId = pokemons.length > 0 ? pokemons[pokemons.length - 1].number : 0;
+        this.newPokemon.number = lastId + 1;
+  
+        this.http.post<Pokemon>('http://localhost:3000/pokemon', this.newPokemon).subscribe(
+          (pokemon: Pokemon) => {
+            console.log('Nouveau Pokémon ajouté :', pokemon);
+            this.newPokemon = {};
+            this.getPokemons();
+          },
+          (error) => {
+            console.error('Erreur lors de l\'ajout du Pokémon :', error);
+          }
+        );
       },
       (error) => {
-        console.error('Erreur lors de l\'ajout du Pokémon :', error);
+        console.error('Erreur lors de la récupération des Pokémon :', error);
       }
     );
   }
+  
 }
