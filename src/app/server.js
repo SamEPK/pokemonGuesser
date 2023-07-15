@@ -32,13 +32,13 @@ app.delete('/pokemon/:id', function (req, res) {
     var pokemonData = JSON.parse(fs.readFileSync(path.join(__dirname, '../assets/Data.json'), 'utf8'));
     //console.log("pokemonData = " + pokemonData +'\n')
     var pokemonIndex = pokemonData.findIndex(function (pokemon) { return pokemon.number == pokemonId; });
-    console.log("pokemonIndex = " + pokemonIndex + '\n');
+    // console.log("pokemonIndex = " + pokemonIndex +'\n')
     if (pokemonIndex === -1) {
         res.status(404).json({ error: 'Pokémon non trouvé' });
     }
     else {
         var deletedPokemon_1 = pokemonData.splice(pokemonIndex, 1)[0];
-        console.log("deletedPokemon = " + deletedPokemon_1 + '\n');
+        // console.log("deletedPokemon = " + deletedPokemon +'\n')
         fs.writeFile(path.join(__dirname, '../assets/Data.json'), JSON.stringify(pokemonData, null, 2), function (err) {
             if (err) {
                 console.error('Erreur lors de l\'écriture du fichier JSON :', err);
@@ -46,6 +46,28 @@ app.delete('/pokemon/:id', function (req, res) {
             }
             else {
                 res.json(deletedPokemon_1);
+            }
+        });
+    }
+});
+app.put('/pokemon/:id', function (req, res) {
+    var pokemonId = parseInt(req.params.id);
+    var updatedPokemon = req.body;
+    var pokemonData = JSON.parse(fs.readFileSync(path.join(__dirname, '../assets/Data.json'), 'utf8'));
+    var pokemonIndex = pokemonData.findIndex(function (pokemon) { return pokemon.number === pokemonId; });
+    console.log("pokemonIndex = " + pokemonIndex + '\n');
+    if (pokemonIndex === -1) {
+        res.status(404).json({ error: 'Pokémon non trouvé' });
+    }
+    else {
+        pokemonData[pokemonIndex] = updatedPokemon;
+        fs.writeFile(path.join(__dirname, '../assets/Data.json'), JSON.stringify(pokemonData, null, 2), function (err) {
+            if (err) {
+                console.error('Erreur lors de l\'écriture du fichier JSON :', err);
+                res.status(500).json({ error: 'Erreur lors de l\'écriture du fichier JSON' });
+            }
+            else {
+                res.json(updatedPokemon);
             }
         });
     }

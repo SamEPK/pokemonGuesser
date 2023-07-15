@@ -5587,7 +5587,11 @@
     "legendary": 1
   },
   {
-    "name": "seven",
-    "number": 152
+    "name": "prout",
+    "number": 152,
+    "type1": "GAZ",
+    "type2": "NOCIF",
+    "height": "0 bar",
+    "weight": "56"
   }
 ]

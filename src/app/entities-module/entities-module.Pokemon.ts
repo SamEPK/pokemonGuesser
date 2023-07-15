@@ -38,6 +38,11 @@ export class Pokemon {
     constructor() {
       this.number = -1;
       this.name = "";
+      this.type = -1;
+      this.type1 = "";
+      this.type2 = "";
+      this.height = -1;
+      this.weight = -1;
     }
   }
   

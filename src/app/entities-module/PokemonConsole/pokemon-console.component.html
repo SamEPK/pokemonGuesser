@@ -1,5 +1,5 @@
 <main>
-  <h2>Liste des Pokemon</h2>
+  <h2>Liste des Pokémon</h2>
   <div *ngIf="pokemons$ | async as pokemons">
     <div class="admin-actions">
       <form (submit)="ajouterPokemon()">
@@ -17,7 +17,7 @@
           <th>Type</th>
           <th>Taille</th>
           <th>Poids</th>
-          <th>Action</th> <!-- Ajout de la colonne "Action" -->
+          <th>Actions</th> <!-- Modification du texte "Action" à "Actions" -->
         </tr>
       </thead>
       <tbody>
@@ -26,16 +26,52 @@
           <td>
             <img [src]="'./assets/images/' + formatPokemonNumber(pokemon)" [alt]="pokemon.name" height="100">
           </td>
-          <td>{{ pokemon.name }}</td>
-          <td>{{ pokemon.type1 }} / {{ pokemon.type2 }}</td>
-          <td>{{ pokemon.height }}</td>
-          <td>{{ pokemon.weight }}</td>
           <td>
-            <button (click)="deletePokemon(pokemon.number)">Supprimer</button> <!-- Bouton de suppression -->
+            <ng-container *ngIf="!isEditing(pokemon); else editName">
+              {{ pokemon.name }}
+            </ng-container>
+            <ng-template #editName>
+              <input *ngIf="editingPokemon && editingPokemon.number === pokemon.number" type="text" [(ngModel)]="editingPokemon.name">
+            </ng-template>
+          </td>
+          <td>
+            <ng-container *ngIf="!isEditing(pokemon); else editType">
+              {{ pokemon.type1 }} / {{ pokemon.type2 }}
+            </ng-container>
+            <ng-template #editType>
+              <input *ngIf="editingPokemon && editingPokemon.number === pokemon.number" type="text" [(ngModel)]="editingPokemon.type1">
+              <input *ngIf="editingPokemon && editingPokemon.number === pokemon.number" type="text" [(ngModel)]="editingPokemon.type2">
+            </ng-template>
+          </td>
+          <td>
+            <ng-container *ngIf="!isEditing(pokemon); else editHeight">
+              {{ pokemon.height }}
+            </ng-container>
+            <ng-template #editHeight>
+              <input *ngIf="editingPokemon && editingPokemon.number === pokemon.number" type="text" [(ngModel)]="editingPokemon.height">
+            </ng-template>
+          </td>
+          <td>
+            <ng-container *ngIf="!isEditing(pokemon); else editWeight">
+              {{ pokemon.weight }}
+            </ng-container>
+            <ng-template #editWeight>
+              <input *ngIf="editingPokemon && editingPokemon.number === pokemon.number" type="text" [(ngModel)]="editingPokemon.weight">
+            </ng-template>
+          </td>
+          <td>
+            <ng-container *ngIf="!isEditing(pokemon)">
+              <button (click)="deletePokemon(pokemon.number)">Supprimer</button>
+              <button (click)="editPokemon(pokemon)">Editer</button>
+            </ng-container>
+            <ng-container *ngIf="isEditing(pokemon)">
+              <button (click)="updatePokemon()">Enregistrer</button>
+              <button (click)="cancelEdit()">Annuler</button>
+            </ng-container>
           </td>
         </tr>
       </tbody>
+      
     </table>
   </div>
-
 </main>

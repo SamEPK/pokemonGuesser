@@ -34,13 +34,13 @@ app.delete('/pokemon/:id', (req, res) => {
   //console.log("pokemonData = " + pokemonData +'\n')
   const pokemonIndex = pokemonData.findIndex((pokemon: any) => pokemon.number == pokemonId);
   
-  console.log("pokemonIndex = " + pokemonIndex +'\n')
+  // console.log("pokemonIndex = " + pokemonIndex +'\n')
   if (pokemonIndex === -1) {
     res.status(404).json({ error: 'Pokémon non trouvé' });
   } else {
     const deletedPokemon = pokemonData.splice(pokemonIndex, 1)[0];
     
-    console.log("deletedPokemon = " + deletedPokemon +'\n')
+    // console.log("deletedPokemon = " + deletedPokemon +'\n')
 
     fs.writeFile(path.join(__dirname, '../assets/Data.json'), JSON.stringify(pokemonData, null, 2), (err) => {
       if (err) {

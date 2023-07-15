@@ -12,6 +12,8 @@ import { HttpClient } from '@angular/common/http';
 export class PokemonConsoleComponent implements OnInit {
   pokemons$: Observable<Pokemon[]> | undefined;
   newPokemon: Partial<Pokemon> = {};
+  editingPokemon: Pokemon | null = null;
+  originalPokemon: Pokemon | null = null;
 
   constructor(private pokemonService: PokemonService, private http: HttpClient) {}
 
@@ -23,7 +25,7 @@ export class PokemonConsoleComponent implements OnInit {
   getPokemons(): void {
     console.log('getPokemons called');
     this.pokemons$ = this.pokemonService.getAllPokemon();
-    
+
     this.pokemons$.subscribe(
       (pokemons: Pokemon[]) => {
         console.log('Pokémons:', pokemons);
@@ -32,7 +34,8 @@ export class PokemonConsoleComponent implements OnInit {
         console.error('Erreur lors de la récupération des Pokémon :', error);
       }
     );
-  }  
+  }
+
   formatPokemonNumber(pokemon: Pokemon): string {
     if (pokemon && pokemon.number) {
       const paddedNumber = pokemon.number.toString().padStart(3, '0');
@@ -40,12 +43,13 @@ export class PokemonConsoleComponent implements OnInit {
     }
     return '';
   }
+
   ajouterPokemon(): void {
     this.http.get<Pokemon[]>('http://localhost:3000/pokemon').subscribe(
       (pokemons: Pokemon[]) => {
         const lastId = pokemons.length > 0 ? pokemons[pokemons.length - 1].number : 0;
         this.newPokemon.number = lastId + 1;
-  
+
         this.http.post<Pokemon>('http://localhost:3000/pokemon', this.newPokemon).subscribe(
           (pokemon: Pokemon) => {
             console.log('Nouveau Pokémon ajouté :', pokemon);
@@ -62,6 +66,7 @@ export class PokemonConsoleComponent implements OnInit {
       }
     );
   }
+
   deletePokemon(id: number): void {
     this.http.delete(`http://localhost:3000/pokemon/${id}`).subscribe(
       () => {
@@ -72,18 +77,37 @@ export class PokemonConsoleComponent implements OnInit {
         console.error(`Erreur lors de la suppression du Pokémon avec l'ID ${id}`, error);
       }
     );
-  }  
-  updatePokemon(pokemon: Pokemon): void {
-    const url = `http://localhost:3000/pokemon/${pokemon.number}`;
+  }
+
+  updatePokemon(): void {
+    if (this.editingPokemon) {
+      const url = `http://localhost:3000/pokemon/${this.editingPokemon.number}`;
+    
+      this.http.put<Pokemon>(url, this.editingPokemon).subscribe(
+        (updatedPokemon: Pokemon) => {
+          console.log('Pokémon mis à jour :', updatedPokemon);
+          this.getPokemons();
+          this.cancelEdit();
+        },
+        (error) => {
+          console.error('Erreur lors de la mise à jour du Pokémon :', error);
+        }
+      );
+    }
+  }
+
+  editPokemon(pokemon: Pokemon): void {
+    this.editingPokemon = { ...pokemon };
+  }
   
-    this.http.put<Pokemon>(url, pokemon).subscribe(
-      (updatedPokemon: Pokemon) => {
-        console.log('Pokémon mis à jour :', updatedPokemon);
-        this.getPokemons();
-      },
-      (error) => {
-        console.error('Erreur lors de la mise à jour du Pokémon :', error);
-      }
-    );
-  }  
+  
+
+  cancelEdit(): void {
+    this.editingPokemon = null;
+    this.originalPokemon = null;
+  }
+
+  isEditing(pokemon: Pokemon): boolean {
+    return !!this.editingPokemon && this.editingPokemon.number === pokemon.number;
+  }
 }
