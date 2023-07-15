@@ -1,5 +1,5 @@
 export class Pokemon {
-    number: number;
+    id: number;
     name: string;
     type?: number;
     type1?: string;
@@ -36,7 +36,7 @@ export class Pokemon {
     legendary?: boolean;
   
     constructor() {
-      this.number = -1;
+      this.id = -1;
       this.name = "";
     }
   }

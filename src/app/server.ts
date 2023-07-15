@@ -26,28 +26,6 @@ app.post('/pokemon', (req, res) => {
   res.json(newPokemon);
 });
 
-app.delete('/pokemon/:id', (req, res) => {
-  const pokemonId = req.params.id;
-
-  // Read the current contents of the JSON file
-  const pokemonData = JSON.parse(fs.readFileSync(path.join(__dirname, '../assets/Data.json'), 'utf8'));
-
-  // Find the index of the Pokémon to delete
-  const pokemonIndex = pokemonData.findIndex((pokemon: { number: number }) => pokemon.number === Number(pokemonId));
-
-  if (pokemonIndex !== -1) {
-    // Remove the Pokémon from the array
-    pokemonData.splice(pokemonIndex, 1);
-
-    // Write the updated content back to the JSON file with formatting
-    fs.writeFileSync(path.join(__dirname, '../assets/Data.json'), JSON.stringify(pokemonData, null, 2));
-
-    res.sendStatus(200);
-  } else {
-    res.sendStatus(404);
-  }
-});
-
 app.listen(PORT, () => {
   console.log(`Serveur démarré sur le port ${PORT}`);
 });

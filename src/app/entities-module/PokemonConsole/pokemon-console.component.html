@@ -17,22 +17,18 @@
         <th>Type</th>
         <th>Taille</th>
         <th>Poids</th>
-        <th>Action</th> <!-- Nouvelle colonne pour les actions -->
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let pokemon of pokemons">
-        <td>{{ pokemon.number }}</td>
+        <td>{{ pokemon.id }}</td>
         <td>
-          <!-- <img [src]="'src/assets/images/' + formatPokemonNumber(pokemon)" [alt]="pokemon.name" height="100"> -->
+          <!-- <img [src]="'assets/' + formatPokemonNumber(pokemon)" [alt]="pokemon.name" height="100"> -->
         </td>
         <td>{{ pokemon.name }}</td>
         <td>{{ pokemon.type1 }} / {{ pokemon.type2 }}</td>
         <td>{{ pokemon.height }}</td>
         <td>{{ pokemon.weight }}</td>
-        <td>
-          <button (click)="supprimerPokemon(pokemon.number)">Supprimer</button>
-        </td>
       </tr>
     </tbody>
   </table>
