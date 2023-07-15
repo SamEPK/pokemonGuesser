@@ -33,8 +33,8 @@ export class PokemonService {
     return this.http.put<Pokemon>(url, pokemon);
   }
 
-  deletePokemon(id: number): Observable<void> {
-    const url = `${this.pokemonJsonFile}/${id}`;
-    return this.http.delete<void>(url);
+  deletePokemon(id: number): Observable<Pokemon> {
+    return this.http.post<Pokemon>(this.pokemonJsonFile, id);
   }
+  
 }

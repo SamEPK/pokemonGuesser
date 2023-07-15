@@ -54,5 +54,15 @@ export class PokemonConsoleComponent implements OnInit {
       }
     );
   }
-  
+  deletePokemon(id: number): void {
+    this.pokemonService.deletePokemon(id).subscribe(
+      () => {
+        console.log(`Pokémon avec l'ID ${id} supprimé avec succès`);
+        this.getPokemons();
+      },
+      (error) => {
+        console.error(`Erreur lors de la suppression du Pokémon avec l'ID ${id}`, error);
+      }
+    );
+  }
 }

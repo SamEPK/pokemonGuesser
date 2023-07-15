@@ -33,6 +33,29 @@ app.post('/pokemon', function (req, res) {
         }
     });
 });
+app.delete('/pokemon/:id', function (req, res) {
+    var pokemonId = req.params.id;
+    var pokemonData = JSON.parse(fs.readFileSync(path.join(__dirname, '../assets/Data.json'), 'utf8'));
+    var pokemonIndex = pokemonData.findIndex(function (pokemon) { return pokemon.id === pokemonId; });
+    console.log('pokemonIndex', pokemonIndex);
+    console.log('pokemonData', pokemonData);
+    console.log('pokemonId', pokemonId);
+    if (pokemonIndex === -1) {
+        res.status(404).json({ error: 'Pokémon non trouvé' });
+    }
+    else {
+        pokemonData.splice(pokemonIndex, 1);
+        fs.writeFile(path.join(__dirname, '../assets/Data.json'), JSON.stringify(pokemonData, null, 2), function (err) {
+            if (err) {
+                console.error('Erreur lors de l\'écriture du fichier JSON :', err);
+                res.status(500).json({ error: 'Erreur lors de l\'écriture du fichier JSON' });
+            }
+            else {
+                res.json({ message: 'Pokémon supprimé avec succès' });
+            }
+        });
+    }
+});
 app.listen(PORT, function () {
     console.log("Serveur d\u00E9marr\u00E9 sur le port ".concat(PORT));
 });

@@ -11,8 +11,55 @@ h2 {
     font-size: 6rem;
     font-family: 'Tektur', cursive;
   }
-
-
+.admin-actions{
+  display: block;
+  text-align: center;
+  margin: 0 auto;
+}
+button{
+  background: #ffffff;
+  color: #292929;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: .75rem;
+  font-size: 1.6rem;
+  margin: 2rem;
+  font-family: 'Tektur', cursive;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+button:hover{
+  background: #0622c5;
+  color: #ffffff;
+}
+table button{
+  background: #ffffff;
+  color: #292929;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: .75rem;
+  font-size: 1.6rem;
+  margin: 2rem;
+  font-family: 'Tektur', cursive;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+table button:hover{
+  background: #d80909;
+  color: #ffffff;
+}
+input{
+  background: #ffffff;
+  color: #292929;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: .75rem;
+  font-size: 1.6rem;
+  font-family: 'Tektur', cursive;
+  cursor: pointer;
+  margin: 1rem auto;
+  transition: all 0.3s ease-in-out;
+}
 table{
   width: 100%;
   padding: 2rem;

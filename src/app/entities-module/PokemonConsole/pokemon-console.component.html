@@ -17,6 +17,7 @@
           <th>Type</th>
           <th>Taille</th>
           <th>Poids</th>
+          <th>Action</th> <!-- Ajout de la colonne "Action" -->
         </tr>
       </thead>
       <tbody>
@@ -29,6 +30,9 @@
           <td>{{ pokemon.type1 }} / {{ pokemon.type2 }}</td>
           <td>{{ pokemon.height }}</td>
           <td>{{ pokemon.weight }}</td>
+          <td>
+            <button (click)="deletePokemon(pokemon.number)">Supprimer</button> <!-- Bouton de suppression -->
+          </td>
         </tr>
       </tbody>
     </table>
